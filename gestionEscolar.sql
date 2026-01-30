@@ -351,23 +351,30 @@ BEGIN
     DECLARE idCursoNuevo INT;
     DECLARE idCMNuevo INT;
 
-    -- Insertar curso
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+
     INSERT INTO curso(nombreCurso)
     VALUES (nombre);
 
     SET idCursoNuevo = LAST_INSERT_ID();
 
-    -- Insertar curso-materia
     INSERT INTO cursoMateria(id_curso, id_docente, id_materia)
     VALUES (idCursoNuevo, idDocente, idMateria);
 
     SET idCMNuevo = LAST_INSERT_ID();
 
-    -- Insertar horario
     INSERT INTO horarioMateria(id_cursoMateria, horaInicio, horaFin, dia)
     VALUES (idCMNuevo, horaI, horaF, diaI);
+
+    COMMIT;
 END //
 DELIMITER ;
+
 
 call crearCurso('Segundo B',1,2,'10:00:00','12:00:00','martes');
 
@@ -375,46 +382,112 @@ select*from curso;
 select*from cursoMateria;
 select*from horarioMateria;
 
--- crear alumno
-delimiter //
-create procedure crearEstudiante(in nombreI varchar(50),in fechaN date)
-begin
-insert into estudiante(nombre,fechaNacimiento) values(nombreI,fechaN);
-end //
-delimiter ;
+DELIMITER //
+CREATE PROCEDURE crearEstudiante(
+    IN nombreI VARCHAR(50),
+    IN fechaN DATE
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
 
--- matricular
-delimiter //
-create procedure matricular(in idEstudiante int,in idCM int)
-begin
-insert into matricula(id_estudiante,id_cursoMateria) values(idEstudiante,idCM);
-end //
-delimiter ;
+    START TRANSACTION;
 
--- calificaciones
-delimiter //
-create procedure insertarCalificacion(in idMatricula int, in notaI decimal, in descripcionI varchar(100))
-begin
-insert into calificaciones(id_matricula,nota,descripcion) values(idMatricula,notaI,descripcionI);
-end//
-delimiter ;
+    INSERT INTO estudiante(nombre, fechaNacimiento)
+    VALUES (nombreI, fechaN);
 
--- materia
-delimiter //
-create procedure crearMateria(in nombreM varchar(50))
-begin
-insert into materia(nombreMateria) values(nombreM);
-end//
-delimiter ;
+    COMMIT;
+END //
+DELIMITER ;
 
 
--- crear docente
-delimiter //
-create procedure agregarDocente(in nombreD varchar(100),in tituloD varchar(50), in telefonoD varchar(10))
-begin
-insert into docente (nombre, telefono, titulo) values(nombreD,telefonoD,tituloD);
-end//
-delimiter ;
+DELIMITER //
+CREATE PROCEDURE matricular(
+    IN idEstudiante INT,
+    IN idCM INT
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+
+    INSERT INTO matricula(id_estudiante, id_cursoMateria)
+    VALUES (idEstudiante, idCM);
+
+    COMMIT;
+END //
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE insertarCalificacion(
+    IN idMatricula INT,
+    IN notaI DECIMAL,
+    IN descripcionI VARCHAR(100)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+
+    INSERT INTO calificaciones(id_matricula, nota, descripcion)
+    VALUES (idMatricula, notaI, descripcionI);
+
+    COMMIT;
+END //
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE crearMateria(
+    IN nombreM VARCHAR(50)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+
+    INSERT INTO materia(nombreMateria)
+    VALUES (nombreM);
+
+    COMMIT;
+END //
+DELIMITER ;
+
+
+
+DELIMITER //
+CREATE PROCEDURE agregarDocente(
+    IN nombreD VARCHAR(100),
+    IN tituloD VARCHAR(50),
+    IN telefonoD VARCHAR(10)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+
+    INSERT INTO docente(nombre, telefono, titulo)
+    VALUES (nombreD, telefonoD, tituloD);
+
+    COMMIT;
+END //
+DELIMITER ;
+
 
 -- ver alumnos
 create view verAlumnos as select *from estudiante;
