@@ -103,7 +103,7 @@ insert into cursoMateria (id_curso, id_docente, id_materia) values
                                                                 (3, 1, 1), (3, 2, 2),           -- IDs 6, 7
                                                                 (4, 4, 4);                     -- ID 8
 
--- 6. HORARIOMATERIA
+-- 6. horarioMateria
 insert into horarioMateria (id_cursoMateria, horaInicio, horaFin, dia) values
                                                                            (1, '07:00:00', '08:30:00', 'Lunes'),
                                                                            (2, '08:30:00', '10:00:00', 'Lunes'),
@@ -364,7 +364,7 @@ BEGIN
     SET idCMNuevo = LAST_INSERT_ID();
 
     -- Insertar horario
-    INSERT INTO horariomateria(id_cursoMateria, horaInicio, horaFin, dia)
+    INSERT INTO horarioMateria(id_cursoMateria, horaInicio, horaFin, dia)
     VALUES (idCMNuevo, horaI, horaF, diaI);
 END //
 DELIMITER ;
@@ -752,6 +752,6 @@ insert into auditoriaEliminarMatricula(estudianteID,cursoMateria,usuario) values
 end//
 delimiter ;
 
--- delete from horariomateria where id_cursoMateria=10;
+-- delete from horarioMateria where id_cursoMateria=10;
 -- delete from cursomateria where id_curso=6;
-delete from curso where id_curso=6;
+delete from curso where id_curso=5;

@@ -2,7 +2,7 @@
 Indices
 */
 -- Los indicen hacen que las busquedas se hagan por campos indexados haciendo las consultas más rapidas
-
+use gestionEscolar;
 -- Búsquedas por fecha de nacimiento
 CREATE INDEX idx_estudiante_fechaNacimiento
 ON estudiante(fechaNacimiento);

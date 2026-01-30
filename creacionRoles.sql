@@ -20,7 +20,7 @@ En desarollo es necesario para hacer pruebas, pero en produccion es mas riesgoso
 montado todo, entonces aun que demore más darle permisos necesarios, tambien hay menos riesgo
 */
 
-create role "administrador";
+create role administrador;
 -- Permisos
 grant 
 Select, insert, update, delete, execute, show view,
@@ -28,7 +28,7 @@ create, alter, references, index, create view, create routine,
 alter routine, trigger, create temporary tables, lock tables
 on
 gestionescolar.*
-to "administrador";
+to administrador;
 
 flush privileges;
 
@@ -49,31 +49,64 @@ to "inspector";
 
 flush privileges;
 
+
 /*
 Profesor: El maestro debera trabajar sobre algo ya creado entonces el solo deberia poder trabajar
 sobre registros.
 */
-Create role "profesor";
-Grant
-select, update
-on
-gestionescolar.*
-to
-"profesor";
+Create role profesor;
+GRANT SELECT, UPDATE
+ON gestionescolar.calificaciones
+TO profesor;
 
+GRANT SELECT, UPDATE
+ON gestionescolar.curso
+TO profesor;
+
+GRANT SELECT, UPDATE
+ON gestionescolar.cursoMateria
+TO profesor;
+
+GRANT SELECT, UPDATE
+ON gestionescolar.docente
+TO profesor;
+
+GRANT SELECT, UPDATE
+ON gestionescolar.horarioMateria
+TO profesor;
+
+GRANT SELECT, UPDATE
+ON gestionescolar.estudiante
+TO profesor;
+
+GRANT SELECT, UPDATE
+ON gestionescolar.materia
+TO profesor;
 flush privileges;
 
 /*
 Alumno: El alumno solo debe ser capaz de visualizar su informacion sin modificarla
 */
-Create role "alumno";
-Grant 
-select
-on
-gestionescolar.*
-to
-"alumno";
+Create role alumno;
+GRANT SELECT
+ON gestionescolar.estudiante
+TO alumno;
 
+GRANT SELECT
+ON gestionescolar.calificaciones
+TO alumno;
+
+GRANT SELECT
+ON gestionescolar.matricula
+TO alumno;
+
+GRANT SELECT
+ON gestionescolar.curso
+TO alumno;
+
+GRANT SELECT
+ON gestionescolar.cursoMateria
+TO alumno;
 flush privileges;
 
 /*
