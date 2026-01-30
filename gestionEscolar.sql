@@ -429,3 +429,318 @@ create view verMatriculas as select*from matricula;
 
 -- ver materias
 create view verMaterias as select*from materia;
+
+
+-- TRIGGERS
+
+-- INSERT
+-- insertar estudiante
+create table auditoriaInsertarEstudainte(
+id int primary key auto_increment,
+nombre varchar(100),
+fechaInsersion datetime default current_timestamp,
+usuario varchar(100));
+
+delimiter //
+create trigger insertarEstudiante before insert on estudiante for each row
+begin
+declare usuarioA varchar(50);
+set usuarioA= current_user();
+insert into auditoriaInsertarEstudiante(nombre,usuario) values(new.nombre,usuarioA);
+end//
+delimiter ;
+
+-- crear docente
+create table auditoriaInsertarDocente(
+id int primary key auto_increment,
+nombre varchar(100),
+fechaInsersion datetime default current_timestamp,
+usuario varchar(100));
+
+delimiter //
+create trigger insertarDocente before insert on docente for each row
+begin
+declare usuarioA varchar(50);
+set usuarioA= current_user();
+insert into auditoriaInsertarDocente(nombre,usuario) values(new.nombre,usuarioA);
+end//
+delimiter ;
+
+-- insertar materia
+create table auditoriaInsertarMateria(
+id int primary key auto_increment,
+nombre varchar(100),
+fechaInsersion datetime default current_timestamp,
+usuario varchar(100));
+
+delimiter //
+create trigger insertarMateria before insert on materia for each row
+begin
+declare usuarioA varchar(50);
+set usuarioA= current_user();
+insert into auditoriaInsertarMateria(nombre,usuario) values(new.nombreMateria,usuarioA);
+end//
+delimiter ;
+
+-- insertar curso
+create table auditoriaInsertarCurso(
+id int primary key auto_increment,
+nombre varchar(100),
+fechaInsersion datetime default current_timestamp,
+usuario varchar(100));
+
+delimiter //
+create trigger insertarCurso before insert on curso for each row
+begin
+declare usuarioA varchar(50);
+set usuarioA= current_user();
+insert into auditoriaInsertarCurso(nombre,usuario) values(new.nombreCurso,usuarioA);
+end//
+delimiter ;
+
+
+-- calificaciones
+create table auditoriaInsertarCalificacion(
+id int primary key auto_increment,
+idMatricula int,
+nota decimal(4,2),
+fechaInsersion datetime default current_timestamp,
+usuario varchar(100));
+
+delimiter //
+create trigger insertarCalificacion before insert on calificaciones for each row
+begin
+declare usuarioA varchar(50);
+set usuarioA= current_user();
+insert into auditoriaInsertarCalificacion(idMatricula,nota,usuario) values(new.id_matricula,new.nota,usuarioA);
+end//
+delimiter ;
+
+-- matricula
+create table auditoriaInsertarMatricula(
+id int primary key auto_increment,
+estudianteID int,
+cursoMateria int,
+fechaInsersion datetime default current_timestamp,
+usuario varchar(100));
+
+delimiter //
+create trigger insertarMatricula before insert on matricula for each row
+begin
+declare usuarioA varchar(50);
+set usuarioA= current_user();
+insert into auditoriaInsertarMatricula(estudianteID,cursoMateria,usuario) values(new.id_estudiante,new.id_cursoMateria,usuarioA);
+end//
+delimiter ;
+
+-- UPDATE
+
+-- Actualizar estudiante
+create table auditoriaActualizarEstudainte(
+id int primary key auto_increment,
+nombreAntiguo varchar(100),
+nombreNuevo varchar(100),
+fechaInsersion datetime default current_timestamp,
+usuario varchar(100));
+
+delimiter //
+create trigger ActualizarEstudiante before update on estudiante for each row
+begin
+declare usuarioA varchar(50);
+set usuarioA= current_user();
+insert into auditoriaActualizarEstudiante(nombreAntiguo,nombreNuevo,usuario) values(old.nombre,new.nombre,usuarioA);
+end//
+delimiter ;
+
+-- Actualizar docente
+create table auditoriaActualizarDocente(
+id int primary key auto_increment,
+nombreAntiguo varchar(100),
+nombreNuevo varchar(100),
+fechaInsersion datetime default current_timestamp,
+usuario varchar(100));
+
+delimiter //
+create trigger ActualizarDocente before update on docente for each row
+begin
+declare usuarioA varchar(50);
+set usuarioA= current_user();
+insert into auditoriaActualizarDocente(nombreAntiguo,nombreNuevo,usuario) values(old.nombre,new.nombre,usuarioA);
+end//
+delimiter ;
+
+-- Actualizar materia
+create table auditoriaActualizarMateria(
+id int primary key auto_increment,
+nombreAntiguo varchar(100),
+nombreNuevo varchar(100),
+fechaInsersion datetime default current_timestamp,
+usuario varchar(100));
+
+delimiter //
+create trigger ActualizarMateria before update on materia for each row
+begin
+declare usuarioA varchar(50);
+set usuarioA= current_user();
+insert into auditoriaActualizarMateria(nombreAntiguo,nombreNuevo,usuario) values(old.nombreMateria,new.nombreMateria,usuarioA);
+end//
+delimiter ;
+
+-- Actualizar curso
+create table auditoriaActualizarCurso(
+id int primary key auto_increment,
+nombreAntiguo varchar(100),
+nombreNuevo varchar(100),
+fechaInsersion datetime default current_timestamp,
+usuario varchar(100));
+
+delimiter //
+create trigger ActualizarCurso before update on curso for each row
+begin
+declare usuarioA varchar(50);
+set usuarioA= current_user();
+insert into auditoriaActualizarCurso(nombreAntiguo,nombreNuevo,usuario) values(old.nombreCurso,new.nombreCurso,usuarioA);
+end//
+delimiter ;
+
+
+-- calificaciones
+create table auditoriaActualizarCalificacion(
+id int primary key auto_increment,
+idMatriculaAntigua int,
+idMatriculaNueva int,
+notaAntigua decimal(4,2),
+notaNueva decimal(4,2),
+descripcionAntigua varchar(100),
+descripcionNueva varchar(100),
+fechaInsersion datetime default current_timestamp,
+usuario varchar(100));
+
+delimiter //
+create trigger ActualizarCalificacion before update on calificaciones for each row
+begin
+declare usuarioA varchar(50);
+set usuarioA= current_user();
+insert into auditoriaActualizarCalificacion(idMatriculaAntigua,idMatriculaNueva,notaAntigua,notaNueva,descripcionAntigua,descripcionNueva,usuario) values(old.id_matricula,new.id_matricula,old.nota,new.nota,old.descripcion,new.descripcion,usuarioA);
+end//
+delimiter ;
+
+-- matricula
+create table auditoriaActualizarMatricula(
+id int primary key auto_increment,
+estudianteIDA int,
+estudianteIDN int,
+cursoMateriaA int,
+cursoMateriaN int,
+fechaInsersion datetime default current_timestamp,
+usuario varchar(100));
+
+delimiter //
+create trigger ActualizarMatricula before update on matricula for each row
+begin
+declare usuarioA varchar(50);
+set usuarioA= current_user();
+insert into auditoriaInsertarMatricula(estudianteIDA,estudianteIDN,cursoMateriaA,cursoMateriaN,usuario) values(old.id_estudiante,new.id_estudiante,old.id_cursoMateria,new.id_cursoMateria,usuarioA);
+end//
+delimiter ;
+
+-- DELETE
+
+-- Eliminar estudiante
+create table auditoriaEliminarEstudainte(
+id int primary key auto_increment,
+nombre varchar(100),
+fechaEliminacion datetime default current_timestamp,
+usuario varchar(100));
+
+delimiter //
+create trigger EliminarEstudiante before delete on estudiante for each row
+begin
+declare usuarioA varchar(50);
+set usuarioA= current_user();
+insert into auditoriaEliminarEstudiante(nombre,usuario) values(old.nombre,usuarioA);
+end//
+delimiter ;
+
+-- Eliminar docente
+create table auditoriaEliminarDocente(
+id int primary key auto_increment,
+nombre varchar(100),
+fechaEliminacion datetime default current_timestamp,
+usuario varchar(100));
+
+delimiter //
+create trigger EliminarDocente before delete on docente for each row
+begin
+declare usuarioA varchar(50);
+set usuarioA= current_user();
+insert into auditoriaEliminarDocente(nombre,usuario) values(old.nombre,usuarioA);
+end//
+delimiter ;
+
+-- Eliminar materia
+create table auditoriaEliminarMateria(
+id int primary key auto_increment,
+nombre varchar(100),
+fechaEliminacion datetime default current_timestamp,
+usuario varchar(100));
+
+delimiter //
+create trigger EliminarMateria before delete on materia for each row
+begin
+declare usuarioA varchar(50);
+set usuarioA= current_user();
+insert into auditoriaEliminarMateria(nombre,usuario) values(old.nombreMateria,usuarioA);
+end//
+delimiter ;
+
+-- Eliminar curso
+create table auditoriaEliminarCurso(
+id int primary key auto_increment,
+nombre varchar(100),
+fechaEliminacion datetime default current_timestamp,
+usuario varchar(100));
+
+delimiter //
+create trigger EliminarCurso before delete on curso for each row
+begin
+declare usuarioA varchar(50);
+set usuarioA= current_user();
+insert into auditoriaEliminarCurso(nombre,usuario) values(old.nombreCurso,usuarioA);
+end//
+delimiter ;
+
+
+-- calificaciones
+create table auditoriaEliminarCalificacion(
+id int primary key auto_increment,
+idMatricula int,
+nota decimal(4,2),
+fechaEliminacion datetime default current_timestamp,
+usuario varchar(100));
+
+delimiter //
+create trigger EliminarCalificacion before delete on calificaciones for each row
+begin
+declare usuarioA varchar(50);
+set usuarioA= current_user();
+insert into auditoriaEliminarCalificacion(idMatricula,nota,usuario) values(old.id_matricula,old.nota,usuarioA);
+end//
+delimiter ;
+
+-- matricula
+create table auditoriaEliminarMatricula(
+id int primary key auto_increment,
+estudianteID int,
+cursoMateria int,
+fechaEliminacion datetime default current_timestamp,
+usuario varchar(100));
+
+delimiter //
+create trigger EliminarMatricula before delete on matricula for each row
+begin
+declare usuarioA varchar(50);
+set usuarioA= current_user();
+insert into auditoriaEliminarMatricula(estudianteID,cursoMateria,usuario) values(old.id_estudiante,old.id_cursoMateria,usuarioA);
+end//
+delimiter ;
