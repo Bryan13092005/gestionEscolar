@@ -28,9 +28,12 @@ create table if not exists cursoMateria(
                              id_curso int not null,
                              id_docente int not null,
                              id_materia int not null,
-                             constraint FK_CURSO foreign key (id_curso) references curso(id_curso),
-                             constraint FK_MATERIA foreign key (id_materia) references materia(id_materia),
-                             constraint FK_DOCENTE foreign key (id_docente) references docente(id_docente)
+                             constraint FK_CURSO foreign key (id_curso) references curso(id_curso)         ON DELETE CASCADE
+        ON UPDATE CASCADE,
+                             constraint FK_MATERIA foreign key (id_materia) references materia(id_materia)         ON DELETE CASCADE
+        ON UPDATE CASCADE,
+                             constraint FK_DOCENTE foreign key (id_docente) references docente(id_docente)        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 create table if not exists horarioMateria(
@@ -39,15 +42,18 @@ create table if not exists horarioMateria(
                                horaInicio time not null,
                                horaFin time not null,
                                dia varchar(9) not null check(length(dia)>=5 and length(dia)<=9),
-                               constraint FK_CURSO_MATERIA foreign key (id_cursoMateria) references cursoMateria(id_cursoMateria)
+                               constraint FK_CURSO_MATERIA foreign key (id_cursoMateria) references cursoMateria(id_cursoMateria)         ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 create table if not exists matricula(
                           id_matricula int primary key auto_increment,
                           id_estudiante int not null,
                           id_cursoMateria int not null,
-                          constraint FK_CURSO_MATRICULA foreign key (id_cursoMateria) references cursoMateria(id_cursoMateria),
-                          constraint FK_ESTUDIANTE foreign key (id_estudiante) references estudiante(id_estudiante)
+                          constraint FK_CURSO_MATRICULA foreign key (id_cursoMateria) references cursoMateria(id_cursoMateria)         ON DELETE CASCADE
+        ON UPDATE CASCADE,
+                          constraint FK_ESTUDIANTE foreign key (id_estudiante) references estudiante(id_estudiante)        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 create table if not exists calificaciones(
@@ -55,7 +61,8 @@ create table if not exists calificaciones(
                                id_matricula int not null,
                                nota decimal(4,2) not null  default 0 check(nota>=0 and nota<=10),
                                descripcion varchar(50) not null,
-                               constraint FK_MATRICULA foreign key (id_matricula) references matricula(id_matricula)
+                               constraint FK_MATRICULA foreign key (id_matricula) references matricula(id_matricula)         ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 
@@ -744,3 +751,7 @@ set usuarioA= current_user();
 insert into auditoriaEliminarMatricula(estudianteID,cursoMateria,usuario) values(old.id_estudiante,old.id_cursoMateria,usuarioA);
 end//
 delimiter ;
+
+-- delete from horariomateria where id_cursoMateria=10;
+-- delete from cursomateria where id_curso=6;
+delete from curso where id_curso=6;
